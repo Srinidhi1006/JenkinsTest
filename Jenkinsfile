@@ -46,15 +46,8 @@ wrap([$class: 'BuildUser']) {
    { 
     stage('QA Team') {
         echo "Build number is ${currentBuild.number}"
-            emailext (
-                subject: "Need Appproval for build",
-                mimetype: 'text/html', 
-                to: "${notify_users}",
-                body: "build number" +"${currentBuild.number}"+"is pending for approval"
-				)
           input message:"Need for admin approval", submitter: 'admin'
-  
-   
+ 
     
   }
    
