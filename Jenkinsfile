@@ -36,6 +36,31 @@ try {
     def is_car_deploy_error = false;
 	
     stage("Checkout code: current project"){
+	        stage("check user"){
+wrap([$class: 'BuildUser']) {
+   def user = env.BUILD_USER_ID
+   echo "user logged in is=${user}"
+   if("${user}"=="admin")
+   {}
+   else
+   { 
+    stage('QA Team') {
+        echo "Build number is ${currentBuild.number}"
+            emailext (
+                subject: "Need Appproval for build",
+                mimetype: 'text/html', 
+                to: "${notify_users}",
+                body: "build number" +"${currentBuild.number}"+"is pending for approval"
+				)
+          input message:"Need for admin approval", submitter: 'admin'
+  
+   
+    
+  }
+   
+   }
+}
+ }
         bat "mkdir ${ei_service_project_tem_path}"
         dir("${ei_service_project_tem_path}"){
             if(env.SPLDemo){
